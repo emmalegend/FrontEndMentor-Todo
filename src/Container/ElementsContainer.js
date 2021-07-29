@@ -66,8 +66,8 @@ export const Form = styled.form`
 `
 export const InputImgCont = styled.div`
     width:8%;
-    @media (max-width: 400px){
-        width:12%;
+    @media (max-width: 500px){
+        width:11%;
     }
 `
 export const InputImg = styled.div`
@@ -120,7 +120,7 @@ export const Deletebtn = styled.img`
     margin-right:20px;
     cursor: pointer;
     display:none;
-    @media (max-width: 375px){
+    @media (max-width: 500px){
         height:13px;
         width:13px; 
         margin-left:3%;
@@ -150,6 +150,8 @@ font-family: inherit;
 color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
 flex: 1;
 margin-left: 20px;
+text-decoration:${props => props.completed?"line-through":""};
+//color:${props => props.completed?"#D2D3DB": ""};
 display: flex;
 align-items:center;
 justify-items:center;
@@ -165,6 +167,7 @@ width:80%;
 export const ListImg = styled(InputImg)`
 margin-left: 50%;
 background: ${props => props.completed?"linear-gradient(to right, #57DDFF, #C058F3)" : ""};
+border: ${props => props.completed?"2px solid #57DDFF" : ""};
 position:relative;
 cursor:pointer;
 &:hover{
@@ -228,9 +231,12 @@ export const CurrentState = styled.div`
 
 export const All = styled.p`
     color: hsl(236, 9%, 61%);
+    &.active{
+        color:red;
+    }
     &:hover{
-        color:Black;
-        font-weight:700
+        color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
+        font-weight:700;
     }
 `
 
@@ -267,11 +273,12 @@ export const Currentstatemobile = styled(CurrentState)`
         height:40px;
         padding: 0 20%;
         border-radius:5px;
+
         &:hover{
         color:#393A4C;
         font-weight:300
     }
-    }
+}
 `
     export const Atrribution = styled.div`
         font-size: 11px; 

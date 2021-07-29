@@ -6,12 +6,31 @@ import icon from "../images/icon-check.svg";
 import deleteicon from "../images/icon-cross.svg";
 import {nanoid} from "nanoid";
 
+const FILTER_MAP = {
+    All: () => true,
+    Active: task => !task.completed,
+    Completed:task => task.completed
+}
+
+const FILTER_NAMES = Object.keys(FILTER_MAP);
+
+
 const Container = () => {
 
     const [name, setName] = useState('');
     const [time, setTime] = useState(false);
     const [tasks, setTasks] = useState([]);
+    const [filter, setFilter] = useState("All");
 
+    const clearCompleted = () => {
+        const datas = tasks.filter(data => data);
+        setTasks(datas);
+    }
+
+    const handleDelete = (index) => {
+        const data = tasks.filter(task => index !== task.id);
+        setTasks(data);
+    }
 
     const handleComplete = (index) => {
         let clickedTask = tasks[index];
@@ -58,14 +77,14 @@ const Container = () => {
                     <InputImgCont>
                         <InputImg color={time} />
                     </InputImgCont>
-                    <Input placeholder="Create a new todo.."    type="text" 
+                    <Input placeholder="Create a new todo.." type="text" 
                     color={time} 
                     autoComplete="off" 
                     value={name} 
                     onChange={handleChange}/>
                 </Form>
                 <ListCont bgColor={time}>
-                    {tasks.map((task, index) => (
+                    {tasks.filter(FILTER_MAP[filter]).map((task, index) => (
                         <SingleList key={index} >
                             <div style={{width:"10%"}} >
                                 <ListImg color={time} 
@@ -74,28 +93,43 @@ const Container = () => {
                                     <Check src={icon} completed={task.completed}/>
                                 </ListImg>
                             </div>
-                            <List color={time}>
+                            <List color={time} completed={task.completed}>
                                 <div>
                                     <p>{task.name}</p>
                                 </div> 
-                                <Deletebtn onClick={() => console.log(task.id)} src={deleteicon}/>
+                                <Deletebtn onClick={() => handleDelete(task.id)} src={deleteicon}/>
                             </List>
                         </SingleList>
-                        ))}
+                    ))}
                 </ListCont>
                 <FooterDesktop bgColor={time}>
-                        <ItemsRemain>{tasks.length} {tasks.length <= 1?"Item":"Items"} Left</ItemsRemain>
+                        <ItemsRemain>{tasks => !tasks.completed[false].length} {tasks.length <= 1?"Item":"Items"} Left</ItemsRemain>
                         <CurrentState>
-                            <All>All</All>
-                            <All>Active</All>
-                            <All>Completed</All>
+                            {
+                                FILTER_NAMES.map( name => (
+                                    <All
+                                    color={time} 
+                                    key={name}
+                                    aira-pressed={name===filter}
+                                    onClick={() => setFilter(name)}
+                                    >{name}</All>
+                                ))
+                            }
                         </CurrentState>
-                        <ClearCompleted>Clear Completed</ClearCompleted>
+                        <ClearCompleted onClick={() => clearCompleted}>Clear Completed</ClearCompleted>
                 </FooterDesktop>
                 <Currentstatemobile bgColor={time}>
-                    <All>All</All>
-                    <All>Active</All>
-                    <All>Completed</All>
+                   {
+                       FILTER_NAMES.map( name => (
+                        <All 
+                        key={name}
+                        aria-pressed={name===filter}
+                        onClick={() => setFilter(name)}>
+                            {name}
+                        </All>
+
+                    ))
+                   }
                 </Currentstatemobile>
                 </InnerCont>
                 <Reorder>
