@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import { Background, Heading, TitleHeading, LightChange, MainCont, Form, InputImg, Input, ListCont, List, ListImg, SingleList, Deletebtn, Check, FooterDesktop, ItemsRemain, CurrentState, ClearCompleted,All, Reorder, Currentstatemobile, Body, InputImgCont, Atrribution, AttributionA, InnerCont, } from './ElementsContainer';
 import sun from "../images/icon-sun.svg";
 import moon from "../images/icon-moon.svg";
@@ -21,10 +21,29 @@ const Container = () => {
     const [time, setTime] = useState(false);
     const [tasks, setTasks] = useState([]);
     const [filter, setFilter] = useState("All");
+    const [countIncomplete, setCountIncomplete] = useState(tasks.length);
+    // const [gray, setGray] = useState(false);
+
+    // const handleGray = () => {
+    //     if( time === false && tasks.completed === true){
+    //         setGray(true)
+    //     } else if ( time === true && tasks.completed === true ){
+    //         setGray(true)
+    //     }
+
+    // }
+
+    useEffect(() => {
+        let incomplete = tasks.filter(task => !task.completed); // filter out tasks with completed set to false
+        setCountIncomplete(incomplete.length); // update incomplete count number
+    }, [tasks])
+    
+
 
     const clearCompleted = () => {
-        const datas = tasks.filter(data => data);
-        setTasks(datas);
+        setTasks(
+            [...tasks.filter(task => !task.completed)]
+        );
     }
 
     const handleDelete = (index) => {
@@ -36,6 +55,7 @@ const Container = () => {
         let clickedTask = tasks[index];
         tasks[index] = {...clickedTask, completed: !clickedTask.completed};
         setTasks([...tasks]);
+        
     };
 
     const handleSubmit = (e) => {
@@ -103,20 +123,23 @@ const Container = () => {
                     ))}
                 </ListCont>
                 <FooterDesktop bgColor={time}>
-                        <ItemsRemain>{tasks => !tasks.completed[false].length} {tasks.length <= 1?"Item":"Items"} Left</ItemsRemain>
+                        <ItemsRemain>{countIncomplete} {countIncomplete <= 1?"Item":"Items"} Left</ItemsRemain>
                         <CurrentState>
                             {
                                 FILTER_NAMES.map( name => (
+                                    
                                     <All
                                     color={time} 
                                     key={name}
-                                    aira-pressed={name===filter}
-                                    onClick={() => setFilter(name)}
-                                    >{name}</All>
+                                    aria-pressed={name===filter}
+                                    active={name}
+                                    onClick={() => setFilter(name)}>
+                                        {name}
+                                    </All>
                                 ))
                             }
                         </CurrentState>
-                        <ClearCompleted onClick={() => clearCompleted}>Clear Completed</ClearCompleted>
+                        <ClearCompleted onClick={clearCompleted}>Clear Completed</ClearCompleted>
                 </FooterDesktop>
                 <Currentstatemobile bgColor={time}>
                    {

@@ -147,11 +147,11 @@ export const List = styled.div`
 background-color: transparent;
 font-size:22px;
 font-family: inherit;
-color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
+color: ${props => props.color ? "#D2D3DB" : "#484B6A"};
 flex: 1;
 margin-left: 20px;
 text-decoration:${props => props.completed?"line-through":""};
-//color:${props => props.completed?"#D2D3DB": ""};
+//color:${props => props.completed? "#484B6A":"#D2D3DB"};
 display: flex;
 align-items:center;
 justify-items:center;
@@ -231,10 +231,10 @@ export const CurrentState = styled.div`
 
 export const All = styled.p`
     color: hsl(236, 9%, 61%);
-    &.active{
-        color:red;
-    }
-    &:hover{
+    //color: ${props => props.active ? "#3a7bfd" :" "};
+    &:active{
+      color:"#3a7bfd";  
+    }    &:hover{
         color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
         font-weight:700;
     }
