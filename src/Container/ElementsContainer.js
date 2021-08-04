@@ -232,13 +232,20 @@ export const CurrentState = styled.div`
 export const All = styled.p`
     color: hsl(236, 9%, 61%);
     //color: ${props => props.active ? "#3a7bfd" :" "};
-    &:active{
-      color:"#3a7bfd";  
-    }    &:hover{
+    &.active{
+    color: red;
+    }   
+    &:hover{
         color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
         font-weight:700;
     }
 `
+export const Active = styled.p`
+    color: ${props => props.active ? "#3a7bfd" :" "};
+`;
+export const Completed = styled.p`
+
+`;
 
 export const ClearCompleted = styled.p`
     margin-right: 20px;

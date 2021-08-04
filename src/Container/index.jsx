@@ -1,5 +1,6 @@
 import React, {useState,useEffect} from 'react'
-import { Background, Heading, TitleHeading, LightChange, MainCont, Form, InputImg, Input, ListCont, List, ListImg, SingleList, Deletebtn, Check, FooterDesktop, ItemsRemain, CurrentState, ClearCompleted,All, Reorder, Currentstatemobile, Body, InputImgCont, Atrribution, AttributionA, InnerCont, } from './ElementsContainer';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Background, Heading, TitleHeading, LightChange, MainCont, Form, InputImg, Input, ListCont, List, ListImg, SingleList, Deletebtn, Check, FooterDesktop, ItemsRemain, CurrentState, ClearCompleted,All, Reorder, Currentstatemobile, Body, InputImgCont, Atrribution, AttributionA, InnerCont, Completed, Active} from './ElementsContainer';
 import sun from "../images/icon-sun.svg";
 import moon from "../images/icon-moon.svg";
 import icon from "../images/icon-check.svg";
@@ -22,23 +23,21 @@ const Container = () => {
     const [tasks, setTasks] = useState([]);
     const [filter, setFilter] = useState("All");
     const [countIncomplete, setCountIncomplete] = useState(tasks.length);
-    // const [gray, setGray] = useState(false);
-
-    // const handleGray = () => {
-    //     if( time === false && tasks.completed === true){
-    //         setGray(true)
-    //     } else if ( time === true && tasks.completed === true ){
-    //         setGray(true)
-    //     }
-
-    // }
+    
 
     useEffect(() => {
         let incomplete = tasks.filter(task => !task.completed); // filter out tasks with completed set to false
         setCountIncomplete(incomplete.length); // update incomplete count number
     }, [tasks])
     
-
+    const handleOnDragEnd = (result) => {
+        if (!result.destination) return;
+        const items = Array.from(tasks);
+        const [reorderedItem] = items.splice(result.source.index, 1);
+        items.splice(result.destination.index, 0, reorderedItem);
+        
+        setTasks(items);
+    }
 
     const clearCompleted = () => {
         setTasks(
@@ -103,9 +102,14 @@ const Container = () => {
                     value={name} 
                     onChange={handleChange}/>
                 </Form>
-                <ListCont bgColor={time}>
-                    {tasks.filter(FILTER_MAP[filter]).map((task, index) => (
-                        <SingleList key={index} >
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId="character">
+                    { (provided) => (
+                    <ListCont bgColor={time} {...provided.droppableProps} ref={provided.innerRef}>
+                        {tasks.filter(FILTER_MAP[filter]).map((task, index) => ( 
+                        <Draggable key={task.id} draggableId={task.id} index={index}>
+                         {(provided) => (
+                        <SingleList {...provided.draggableProps} {...provided.dragHandleProps} ref={provided.innerRef}>
                             <div style={{width:"10%"}} >
                                 <ListImg color={time} 
                                 onClick={()=>handleComplete(index)} completed={task.completed}
@@ -120,8 +124,14 @@ const Container = () => {
                                 <Deletebtn onClick={() => handleDelete(task.id)} src={deleteicon}/>
                             </List>
                         </SingleList>
-                    ))}
-                </ListCont>
+                        )}              
+                        </Draggable>
+                        ))}
+                        {provided.placeholder}
+                    </ListCont>
+                    )}
+                </Droppable>
+                </DragDropContext>
                 <FooterDesktop bgColor={time}>
                         <ItemsRemain>{countIncomplete} {countIncomplete <= 1?"Item":"Items"} Left</ItemsRemain>
                         <CurrentState>
@@ -142,17 +152,18 @@ const Container = () => {
                         <ClearCompleted onClick={clearCompleted}>Clear Completed</ClearCompleted>
                 </FooterDesktop>
                 <Currentstatemobile bgColor={time}>
-                   {
-                       FILTER_NAMES.map( name => (
                         <All 
-                        key={name}
-                        aria-pressed={name===filter}
-                        onClick={() => setFilter(name)}>
-                            {name}
+                        onClick={() => setFilter("All")}>
+                            All
                         </All>
-
-                    ))
-                   }
+                        <Active 
+                        onClick={() => setFilter("Active")}>
+                            Active
+                        </Active>
+                        <Completed 
+                        onClick={() => setFilter("Completed")}>
+                            Completed
+                        </Completed>
                 </Currentstatemobile>
                 </InnerCont>
                 <Reorder>
