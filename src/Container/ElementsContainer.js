@@ -59,9 +59,9 @@ export const Form = styled.form`
     padding: 0% 5%;
     border-radius:5px;
     margin-top:8%;
-    @media (max-width: 375px){
+    @media (max-width: 500px){
         height:60px;
-        margin-top:12%;
+        margin-top:15%;
     }
 `
 export const InputImgCont = styled.div`
@@ -87,7 +87,7 @@ export const Input = styled.input`
     background-color: transparent;
     border: 0;
     color: ${props => props.color ? "#CACDE8" :"#484B6A"};
-    font-size:20px;
+    font-size:18px;
     font-family: inherit;
     caret-color: hsl(220, 98%, 61%);
     @media (max-width: 500px){
@@ -145,13 +145,13 @@ export const SingleList = styled.div`
 
 export const List = styled.div`
 background-color: transparent;
-font-size:22px;
+font-size:20px;
 font-family: inherit;
 color: ${props => props.color ? "#D2D3DB" : "#484B6A"};
 flex: 1;
 margin-left: 20px;
 text-decoration:${props => props.completed?"line-through":""};
-//color:${props => props.completed? "#484B6A":"#D2D3DB"};
+//color:${props => props.colorChange?"#D2D3DB": "#484B6A"};
 display: flex;
 align-items:center;
 justify-items:center;
@@ -200,7 +200,7 @@ export const FooterDesktop = styled.div`
     background-color:${props => props.bgColor ? "#393A4C" :"#FAFAFA"};
     border-bottom-left-radius:5px;
     border-bottom-right-radius:5px;
-    @media (max-width: 375px){
+    @media (max-width: 500px){
         height:60px;
     }
 `
@@ -209,7 +209,7 @@ export const ItemsRemain = styled.p`
     font-size:14px;
     color: hsl(236, 9%, 61%);
     font-weight:300;
-    @media (max-width: 400px){
+    @media (max-width: 500px){
         font-size:12px;
         margin-left:20px;
     }
@@ -231,7 +231,7 @@ export const CurrentState = styled.div`
 
 export const All = styled.p`
     color: hsl(236, 9%, 61%);
-    //color: ${props => props.active ? "#3a7bfd" :" "};
+    color: ${props => props.active ? "#3a7bfd" :" "};
     &.active{
     color: red;
     }   
@@ -241,10 +241,24 @@ export const All = styled.p`
     }
 `
 export const Active = styled.p`
-    color: ${props => props.active ? "#3a7bfd" :" "};
+     color: hsl(236, 9%, 61%);
+    &:active{
+    color: red;
+    }   
+    &:hover{
+        color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
+        font-weight:700;
+    }
 `;
 export const Completed = styled.p`
-
+     color: hsl(236, 9%, 61%);
+    &.active{
+    color: red;
+    }   
+    &:hover{
+        color: ${props => props.color ? "#D2D3DB" :"#484B6A"};
+        font-weight:700;
+    }
 `;
 
 export const ClearCompleted = styled.p`

@@ -13,9 +13,6 @@ const FILTER_MAP = {
     Completed:task => task.completed
 }
 
-const FILTER_NAMES = Object.keys(FILTER_MAP);
-
-
 const Container = () => {
 
     const [name, setName] = useState('');
@@ -24,7 +21,6 @@ const Container = () => {
     const [filter, setFilter] = useState("All");
     const [countIncomplete, setCountIncomplete] = useState(tasks.length);
     
-
     useEffect(() => {
         let incomplete = tasks.filter(task => !task.completed); // filter out tasks with completed set to false
         setCountIncomplete(incomplete.length); // update incomplete count number
@@ -135,24 +131,20 @@ const Container = () => {
                 <FooterDesktop bgColor={time}>
                         <ItemsRemain>{countIncomplete} {countIncomplete <= 1?"Item":"Items"} Left</ItemsRemain>
                         <CurrentState>
-                            {
-                                FILTER_NAMES.map( name => (
-                                    
-                                    <All
-                                    color={time} 
-                                    key={name}
-                                    aria-pressed={name===filter}
-                                    active={name}
-                                    onClick={() => setFilter(name)}>
-                                        {name}
-                                    </All>
-                                ))
-                            }
+                            <All active onClick={() => setFilter("All")}>
+                                All
+                            </All>
+                            <Active onClick={() => setFilter("Active")}>
+                                Active
+                            </Active>
+                            <Completed  onClick={() => setFilter("Completed")}>
+                                Completed
+                            </Completed>
                         </CurrentState>
                         <ClearCompleted onClick={clearCompleted}>Clear Completed</ClearCompleted>
                 </FooterDesktop>
                 <Currentstatemobile bgColor={time}>
-                        <All 
+                        <All active
                         onClick={() => setFilter("All")}>
                             All
                         </All>
